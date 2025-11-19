@@ -1,8 +1,9 @@
 "use client";
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 // Corrigido: Substituído 'Pinterest' por 'Palette' (ou um ícone disponível)
 import { Moon, Sun, Github, Palette, Mail, Menu, X, ArrowDown } from 'lucide-react'; 
 import Dock from './pag_de_contatos';
+import VariableProximity from './VariableProximity';
 
 // --- Dados Mockados para Demonstração ---
 const MOCK_PROJECTS = [
@@ -77,9 +78,9 @@ const ProjectModal = ({ project, onClose }) => {
 // --- Componente Principal ---
 export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [isHoveringName, setIsHoveringName] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
+  const containerRef = useRef(null);
 
   // Efeito para aplicar a classe 'dark' ao body
   useEffect(() => {
@@ -112,18 +113,15 @@ export default function App() {
 
   // Dock items para a seção de links
   const dockItems = [
-    { icon: <Github size={24} />, label: 'GitHub', onClick: () => window.open('https://github.com/seuusuario', '_blank') },
-    { icon: <Palette size={24} />, label: 'Arte/Pinterest', onClick: () => window.open('https://pinterest.com/seuusuario', '_blank') },
+    { icon: <Github size={24} />, label: 'GitHub', onClick: () => window.open('https://github.com/EduardoRomaniniPessoa', '_blank') },
+    { icon: <Palette size={24} />, label: 'Portifólio de Artes', onClick: () => window.open('https://pinterest.com/seuusuario', '_blank') },
     { icon: <Mail size={24} />, label: 'Email', onClick: () => (window.location.href = 'mailto:seuemail@gmail.com') },
   ];
-
-  // O texto que revesa (Requisitos: é revesado conforme o mouse passa por cima)
-  const nameText = isHoveringName ? "ello" : "Eduardo Romanini";
 
 
   // --- Estrutura da Primeira Tela: Hero ---
   const HeroSection = () => (
-    <div className="relative flex flex-col items-center justify-center min-h-screen pt-16 px-4">
+    <div ref={containerRef} className="relative min-h-screen pt-16 px-4 md:px-12 lg:px-20">
       
       {/* Botão de Tema (Canto Superior Esquerdo) */}
       <button
@@ -134,46 +132,64 @@ export default function App() {
         {isDarkMode ? <Sun size={24} /> : <Moon size={24} />}
       </button>
 
-      {/* Identificação e Efeito Hover */}
-      <div
-        className="text-center transition-all duration-500"
-        onMouseEnter={() => setIsHoveringName(true)}
-        onMouseLeave={() => setIsHoveringName(false)}
-      >
-        <h1 className="text-6xl sm:text-7xl lg:text-8xl font-black mb-4 select-none cursor-pointer tracking-tighter text-gray-900 dark:text-white transform md:-translate-x-12">
-          <span className={`transition-colors duration-300 ${isHoveringName ? 'text-purple-600 dark:text-yellow-400' : 'text-purple-900 dark:text-purple-300'}`}>
-            {nameText.split(' ')[0]}
-          </span>
-          <span className="text-gray-400 dark:text-gray-600">
-            {nameText.split(' ')[1] ? ` ${nameText.split(' ')[1]}` : ''}
-          </span>
-        </h1>
-        
-        {/* Rápida Descrição */}
-        <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto italic font-medium">
-          Designer gráfico e desenvolvedor front-end júnior. Formação em Belas Artes e 2 anos de experiência em projetos de UI/UX.
-        </p>
-      </div>
+      {/* Estrelas nos cantos */}
+      <div className="absolute top-8 right-8 text-purple-600 dark:text-purple-400 text-4xl">★</div>
+      <div className="absolute bottom-8 left-8 text-purple-600 dark:text-purple-400 text-4xl">★</div>
+      <div className="absolute bottom-8 right-8 text-purple-600 dark:text-purple-400 text-4xl">★</div>
 
-      {/* Desenho do Tigre (Símbolo do Site) - Lado Direito */}
-      <div className="absolute right-0 top-1/4 w-32 h-32 opacity-20 sm:opacity-50 text-purple-600 dark:text-purple-400 transition-opacity hidden md:block">
-        <TigerSVG />
+      {/* Container principal com layout grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center min-h-[70vh] max-w-7xl mx-auto">
+        
+        {/* Lado Esquerdo: Nome e Bio */}
+        <div className="flex flex-col justify-center space-y-6">
+          {/* Nome com VariableProximity */}
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black cursor-pointer tracking-tighter text-gray-900 dark:text-white">
+            <VariableProximity
+              label="Eduardo Romanini"
+              fromFontVariationSettings="'wght' 400"
+              toFontVariationSettings="'wght' 900"
+              containerRef={containerRef}
+              radius={150}
+              falloff="linear"
+              className="text-purple-900 dark:text-purple-300"
+            />
+          </h1>
+          
+          {/* Bio */}
+          <div className="space-y-4">
+            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+              Designer gráfico e desenvolvedor front-end júnior.
+            </p>
+            <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+              Formação em Belas Artes e 2 anos de experiência em projetos de UI/UX.
+            </p>
+          </div>
+        </div>
+
+        {/* Lado Direito: Tigre */}
+        <div className="flex items-center justify-center md:justify-end">
+          <div className="w-64 h-64 lg:w-80 lg:h-80 text-purple-600 dark:text-purple-400 opacity-80">
+            <TigerSVG />
+          </div>
+        </div>
       </div>
 
       {/* Prévia da Próxima Página (Bottom) */}
-      <div className="mt-20 p-4 border-t border-b border-purple-200 dark:border-purple-800 w-full max-w-4xl flex justify-around gap-4">
-        {['Sobre Mim', 'Contato', 'Loja', 'Projetos'].map((item, index) => (
-          <div 
-            key={index} 
-            className="w-1/4 h-12 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer text-sm font-semibold text-gray-700 dark:text-gray-300"
-          >
-            {item}
-          </div>
-        ))}
+      <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-full max-w-4xl px-4">
+        <div className="flex justify-center gap-4">
+          {['Sobre Mim', 'Contato', 'Loja', 'Projetos'].map((item, index) => (
+            <div 
+              key={index} 
+              className="flex-1 max-w-[150px] h-12 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300"
+            >
+              {item}
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Indicador de Scroll */}
-      <div className="absolute bottom-6 animate-bounce text-gray-500 dark:text-gray-400">
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 animate-bounce text-gray-500 dark:text-gray-400">
         <ArrowDown size={32} />
       </div>
     </div>
@@ -185,8 +201,8 @@ export default function App() {
     <div className="min-h-screen py-20 px-4 bg-gray-50 dark:bg-gray-900 transition-colors duration-500">
       <div className="max-w-6xl mx-auto">
         
-        {/* Caixas: Sobre Mim, Contato e Loja */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+        {/* Caixas: Sobre Mim e Loja */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20 max-w-4xl mx-auto">
           
           {/* Caixa Sobre Mim */}
           <InfoBox title="Sobre Mim" icon={<Menu size={28} className="text-purple-600 dark:text-purple-400" />}>
@@ -195,16 +211,6 @@ export default function App() {
             </p>
             <p className="mt-2 text-xs text-purple-500 dark:text-purple-300 font-medium">
               Leia mais sobre minha jornada...
-            </p>
-          </InfoBox>
-
-          {/* Caixa Contato */}
-          <InfoBox title="Contato" icon={<Mail size={28} className="text-purple-600 dark:text-purple-400" />}>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Disponível para novos projetos e colaborações. Envie um e-mail ou entre em contato pelas redes sociais.
-            </p>
-            <p className="mt-2 text-xs text-purple-500 dark:text-purple-300 font-medium">
-              Email: contato@portfolio.com
             </p>
           </InfoBox>
 
@@ -282,7 +288,7 @@ export default function App() {
           <h3 className="text-2xl font-semibold mb-6 text-gray-700 dark:text-gray-200">
             Conecte-se e veja mais projetos
           </h3>
-          <Dock items={dockItems} panelHeight={68} baseItemSize={56} magnification={90} />
+          <Dock items={dockItems} panelHeight={60} baseItemSize={45} magnification={75} spring={{ mass: 0, stiffness: 50, damping: 30 }} distance={10} />
         </div>
 
       </div>
@@ -332,4 +338,4 @@ const SocialLink = ({ Icon, label, href }) => (
       {label}
     </span>
   </a>
-);
+)

@@ -79,8 +79,8 @@ function DockIcon({ children, className = '' }) {
 export default function Dock({
   items,
   className = '',
-  spring = { mass: 0.1, stiffness: 150, damping: 12 },
-  magnification = 70,
+  spring = { mass: 0, stiffness: 150, damping: 12 },
+  magnification = 600,
   distance = 200,
   panelHeight = 68,
   dockHeight = 256,
