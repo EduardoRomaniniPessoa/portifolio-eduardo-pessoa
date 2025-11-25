@@ -1,3 +1,4 @@
+'use client';
 import { useRef, useEffect } from 'react';
 import './Squares.css';
 
@@ -15,6 +16,8 @@ const Squares = ({
   const numSquaresY = useRef();
   const gridOffset = useRef({ x: 0, y: 0 });
   const hoveredSquare = useRef(null);
+  const mousePosition = useRef({ x: 0, y: 0 });
+  const parallaxOffset = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -33,13 +36,20 @@ const Squares = ({
     const drawGrid = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const startX = Math.floor(gridOffset.current.x / squareSize) * squareSize;
-      const startY = Math.floor(gridOffset.current.y / squareSize) * squareSize;
+      // Aplica o efeito de parallax suave
+      const targetParallaxX = (mousePosition.current.x - canvas.width / 2) * 0.02;
+      const targetParallaxY = (mousePosition.current.y - canvas.height / 2) * 0.02;
+      
+      parallaxOffset.current.x += (targetParallaxX - parallaxOffset.current.x) * 0.1;
+      parallaxOffset.current.y += (targetParallaxY - parallaxOffset.current.y) * 0.1;
+
+      const startX = Math.floor((gridOffset.current.x + parallaxOffset.current.x) / squareSize) * squareSize;
+      const startY = Math.floor((gridOffset.current.y + parallaxOffset.current.y) / squareSize) * squareSize;
 
       for (let x = startX; x < canvas.width + squareSize; x += squareSize) {
         for (let y = startY; y < canvas.height + squareSize; y += squareSize) {
-          const squareX = x - (gridOffset.current.x % squareSize);
-          const squareY = y - (gridOffset.current.y % squareSize);
+          const squareX = x - ((gridOffset.current.x + parallaxOffset.current.x) % squareSize);
+          const squareY = y - ((gridOffset.current.y + parallaxOffset.current.y) % squareSize);
 
           if (
             hoveredSquare.current &&
@@ -101,11 +111,14 @@ const Squares = ({
       const mouseX = event.clientX - rect.left;
       const mouseY = event.clientY - rect.top;
 
-      const startX = Math.floor(gridOffset.current.x / squareSize) * squareSize;
-      const startY = Math.floor(gridOffset.current.y / squareSize) * squareSize;
+      // Atualiza a posição do mouse para o efeito parallax
+      mousePosition.current = { x: event.clientX, y: event.clientY };
 
-      const hoveredSquareX = Math.floor((mouseX + gridOffset.current.x - startX) / squareSize);
-      const hoveredSquareY = Math.floor((mouseY + gridOffset.current.y - startY) / squareSize);
+      const startX = Math.floor((gridOffset.current.x + parallaxOffset.current.x) / squareSize) * squareSize;
+      const startY = Math.floor((gridOffset.current.y + parallaxOffset.current.y) / squareSize) * squareSize;
+
+      const hoveredSquareX = Math.floor((mouseX + gridOffset.current.x + parallaxOffset.current.x - startX) / squareSize);
+      const hoveredSquareY = Math.floor((mouseY + gridOffset.current.y + parallaxOffset.current.y - startY) / squareSize);
 
       if (
         !hoveredSquare.current ||
