@@ -1,4 +1,5 @@
 "use client";
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 // Corrigido: Substituído 'Pinterest' por 'Palette' (ou um ícone disponível)
 import { Moon, Sun, Github, Palette, Mail, Menu, X, ArrowDown } from 'lucide-react'; 
@@ -298,19 +299,20 @@ export default function App() {
             {/* Estrela no vértice superior direito do painel */}
             <div className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 text-black dark:text-white text-4xl sm:text-6xl transform rotate-12">★</div>
             
-            {/* Nome com VariableProximity */}
+            {/* Nome com estilo Cyber Y2K */}
             <div className="relative inline-block mb-4">
-              <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black cursor-pointer tracking-tighter text-gray-900 dark:text-white" style={{ fontFamily: '"Limelight", sans-serif' }}>
-                <VariableProximity
-                  label="Eduardo Romanini"
-                  fromFontVariationSettings="'wght' 400"
-                  toFontVariationSettings="'wght' 900"
-                  containerRef={containerRef}
-                  radius={150}
-                  falloff="linear"
-                  className="text-black dark:text-white"
-                />
+              {/* Ícone de estrela com cores diferentes para modo claro e escuro */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-gray-600 dark:text-gray-300 text-[10rem] sm:text-[12rem] lg:text-[15rem] opacity-80">★</span>
+              </div>
+              {/* Título principal */}
+              <h1 className="relative text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-gray-900 dark:text-white" style={{ fontFamily: '"Playfair Display", serif' }}>
+                Eduardo Romanini
               </h1>
+              {/* Subtítulo */}
+              <h2 className="relative text-lg sm:text-xl md:text-2xl font-light text-gray-700 dark:text-gray-300 mt-2" style={{ fontFamily: '"Inter", sans-serif' }}>
+                Freelance Creative
+              </h2>
             </div>
             
             {/* Sobre Mim */}
@@ -367,7 +369,15 @@ export default function App() {
           
           {/* Caixa Sobre Mim */}
           <div 
-            className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-xl hover:shadow-black/50 dark:hover:shadow-white/50 transition-all duration-300 border-l-4 border-black dark:border-white cursor-pointer transform hover:scale-[1.02]"
+            className="relative p-6 bg-white dark:bg-gray-800 rounded-xl shadow-xl hover:shadow-black/50 dark:hover:shadow-white/50 transition-all duration-300 border-l-4 border-black dark:border-white cursor-pointer transform hover:scale-[1.02]"
+            onMouseEnter={() => {
+              const img = document.getElementById("sobre-mim-image");
+              if (img) img.style.display = "block";
+            }}
+            onMouseLeave={() => {
+              const img = document.getElementById("sobre-mim-image");
+              if (img) img.style.display = "none";
+            }}
             onClick={() => openInfoModal({
               title: 'Sobre Mim',
               content: (
@@ -379,18 +389,11 @@ export default function App() {
                     <li>crio wireframes de sites, e</li>
                     <li>faço desenvolvimento web frontend!</li>
                   </ul>
-                  <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg mt-4">
-                    <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">Formação:</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Curso de Desenvolvimento de Sistemas na Etec</p>
-                  </div>
-                  <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg mt-3">
-                    <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">Linguagens:</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Inglês, Espanhol e Português</p>
-                  </div>
                 </>
               )
             })}
           >
+            <JumpingImage src="/src/app/fro.png" alt="Sobre Mim" id="sobre-mim-image" />
             <div className="flex items-center space-x-3 mb-3">
               <Menu size={28} className="text-black dark:text-white" />
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Sobre Mim</h3>
@@ -406,7 +409,15 @@ export default function App() {
           {/* Caixa Loja */}
           <div 
             id="loja-section"
-            className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-xl hover:shadow-black/50 dark:hover:shadow-white/50 transition-all duration-300 border-l-4 border-black dark:border-white cursor-pointer transform hover:scale-[1.02] scroll-mt-20"
+            className="relative p-6 bg-white dark:bg-gray-800 rounded-xl shadow-xl hover:shadow-black/50 dark:hover:shadow-white/50 transition-all duration-300 border-l-4 border-black dark:border-white cursor-pointer transform hover:scale-[1.02] scroll-mt-20"
+            onMouseEnter={() => {
+              const img = document.getElementById("loja-image");
+              if (img) img.style.display = "block";
+            }}
+            onMouseLeave={() => {
+              const img = document.getElementById("loja-image");
+              if (img) img.style.display = "none";
+            }}
             onClick={() => openInfoModal({
               title: 'Loja',
               content: (
@@ -417,26 +428,11 @@ export default function App() {
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                     Adquira minhas artes digitais, prints e assets exclusivos. Em breve: tutoriais e brushes personalizados!
                   </p>
-                  <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg mt-4">
-                    <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">Disponível:</h4>
-                    <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                      <li>• Artes digitais exclusivas</li>
-                      <li>• Prints de alta qualidade</li>
-                      <li>• Assets para designers</li>
-                    </ul>
-                  </div>
-                  <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg mt-3">
-                    <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">Em breve:</h4>
-                    <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                      <li>• Tutoriais personalizados</li>
-                      <li>• Brushes customizados</li>
-                      <li>• Comissões abertas</li>
-                    </ul>
-                  </div>
                 </>
               )
             })}
           >
+            <JumpingImage src="/path/to/loja.jpg" alt="Loja" id="loja-image" />
             <div className="flex items-center space-x-3 mb-3">
               <Sun size={28} className="text-black dark:text-white" />
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Loja</h3>
@@ -542,6 +538,155 @@ export default function App() {
     </div>
   );
 
+  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+  const modalRef = useRef(null);
+
+  const handleModalMouseDown = (e) => {
+    setIsDragging(true);
+    setDragStart({
+      x: e.clientX - modalPosition.x,
+      y: e.clientY - modalPosition.y,
+    });
+  };
+
+  const handleModalMouseMove = useCallback(
+    (e) => {
+      if (isDragging) {
+        setModalPosition({
+          x: e.clientX - dragStart.x,
+          y: e.clientY - dragStart.y,
+        });
+      }
+    },
+    [isDragging, dragStart]
+  );
+
+  const handleModalMouseUp = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mousemove', handleModalMouseMove);
+      window.addEventListener('mouseup', handleModalMouseUp);
+      return () => {
+        window.removeEventListener('mousemove', handleModalMouseMove);
+        window.removeEventListener('mouseup', handleModalMouseUp);
+      };
+    }
+  }, [isDragging, handleModalMouseMove, handleModalMouseUp]);
+
+  // Adicionando lógica para garantir que o modal movível e as imagens com física sejam renderizadas corretamente
+
+  // --- Modal Movível ---
+  const DraggableModal = ({ children }) => {
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [isDragging, setIsDragging] = useState(false);
+    const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+
+    const handleMouseDown = (e) => {
+      setIsDragging(true);
+      setDragStart({
+        x: e.clientX - position.x,
+        y: e.clientY - position.y,
+      });
+    };
+
+    const handleMouseMove = useCallback(
+      (e) => {
+        if (isDragging) {
+          setPosition({
+            x: e.clientX - dragStart.x,
+            y: e.clientY - dragStart.y,
+          });
+        }
+      },
+      [isDragging, dragStart]
+    );
+
+    const handleMouseUp = useCallback(() => {
+      setIsDragging(false);
+    }, []);
+
+    useEffect(() => {
+      if (isDragging) {
+        window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("mouseup", handleMouseUp);
+        return () => {
+          window.removeEventListener("mousemove", handleMouseMove);
+          window.removeEventListener("mouseup", handleMouseUp);
+        };
+      }
+    }, [isDragging, handleMouseMove, handleMouseUp]);
+
+    return (
+      <div
+        onMouseDown={handleMouseDown}
+        style={{
+          transform: `translate(${position.x}px, ${position.y}px)`,
+          cursor: isDragging ? "grabbing" : "grab",
+        }}
+        className="absolute bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg border border-gray-300 dark:border-gray-600"
+      >
+        {children}
+      </div>
+    );
+  };
+
+  // --- Componente de Física das Imagens ---
+  const PhysicsImages = () => {
+    const images = [
+      { id: 1, src: '/path/to/image1.jpg', x: 100, y: 200 },
+      { id: 2, src: '/path/to/image2.jpg', x: 300, y: 400 },
+      { id: 3, src: '/path/to/image3.jpg', x: 500, y: 100 },
+      { id: 4, src: '/path/to/image4.jpg', x: 700, y: 300 },
+    ];
+
+    return (
+      <div className="relative w-full h-full">
+        {images.map((image) => (
+          <motion.div
+            key={image.id}
+            initial={{ x: image.x, y: image.y }}
+            animate={{
+              x: [image.x, image.x + Math.random() * 50 - 25, image.x],
+              y: [image.y, image.y + Math.random() * 50 - 25, image.y],
+            }}
+            transition={{ repeat: Infinity, duration: 3 }}
+            className="absolute w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded-full shadow-lg border border-gray-300 dark:border-gray-500"
+          >
+            {/* Local de inserção da imagem */}
+            <img
+              src="/src/app/fro.png" // Substitua pelo caminho da imagem desejada
+              alt={`Imagem ${image.id}`}
+              className="w-full h-full object-cover rounded-full"
+            />
+          </motion.div>
+        ))}
+      </div>
+    );
+  };
+
+  // Corrigindo a definição do componente JumpingImage
+  // --- Componente para Animação de Pulo ---
+  const JumpingImage = ({ src, alt, id }) => {
+    return (
+      <motion.img
+        id={id}
+        src={src}
+        alt={alt}
+        initial={{ opacity: 0, y: 0 }}
+        animate={{
+          opacity: [1, 0],
+          y: [0, -100, 0],
+        }}
+        transition={{ duration: 1, ease: "easeInOut" }}
+        className="absolute w-16 h-16 object-cover rounded-full"
+        style={{ display: "none" }}
+      />
+    );
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans transition-colors duration-500 overflow-x-hidden relative">
       {/* Fundo animado com Squares */}
@@ -555,7 +700,7 @@ export default function App() {
         />
       </div>
       
-      {/* Container principal para o "Fundo daora" (gradiente sutil) */}
+      {/* Container principal para o "Fundo chave" (gradiente sutil) */}
       <div className="relative z-10">
         <HeroSection />
         <SecondSection />
@@ -598,3 +743,89 @@ const SocialLink = ({ Icon, label, href }) => (
     </span>
   </a>
 )
+
+{/* Componente Movível para Título com Imagens de Fundo */}
+const DraggableTitle = () => {
+  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const modalRef = useRef(null);
+
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setDragStart({
+      x: e.clientX - modalPosition.x,
+      y: e.clientY - modalPosition.y,
+    });
+  };
+
+  const handleMouseMove = useCallback(
+    (e) => {
+      if (isDragging) {
+        setModalPosition({
+          x: e.clientX - dragStart.x,
+          y: e.clientY - dragStart.y,
+        });
+      }
+    },
+    [isDragging, dragStart]
+  );
+
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [isDragging, handleMouseMove, handleMouseUp]);
+
+  const imageSections = [
+    { id: 1, x: 100, y: 200 },
+    { id: 2, x: 300, y: 400 },
+    { id: 3, x: 500, y: 100 },
+    { id: 4, x: 700, y: 300 },
+  ];
+
+  return (
+    <div className="relative min-h-screen bg-gray-100 dark:bg-gray-800">
+      {/* Modal Movível */}
+      <motion.div
+        ref={modalRef}
+        onMouseDown={handleMouseDown}
+        style={{
+          transform: `translate(${modalPosition.x}px, ${modalPosition.y}px)`,
+          cursor: isDragging ? 'grabbing' : 'grab',
+        }}
+        className="absolute bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg border border-gray-300 dark:border-gray-600"
+      >
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Eduardo Romanini</h1>
+        <h2 className="text-lg text-gray-700 dark:text-gray-300">Freelance Creative</h2>
+      </motion.div>
+
+      {/* Sessões de Imagens com Física */}
+      {imageSections.map((section) => (
+        <motion.div
+          key={section.id}
+          initial={{ y: section.y, x: section.x }}
+          animate={{ y: [section.y, section.y + 50, section.y], x: section.x }}
+          transition={{ repeat: Infinity, duration: 2 }}
+          className="absolute w-32 h-32 bg-gray-200 dark:bg-gray-600 rounded-lg shadow-lg border border-gray-300 dark:border-gray-500"
+        >
+          {/* Insira sua imagem aqui */}
+          <img
+            src="" // Adicione o caminho da imagem
+            alt="Imagem"
+            className="w-full h-full object-cover rounded-lg"
+          />
+        </motion.div>
+      ))}
+    </div>
+  );
+}
