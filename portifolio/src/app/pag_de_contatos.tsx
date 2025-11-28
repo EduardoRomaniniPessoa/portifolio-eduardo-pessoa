@@ -1,11 +1,22 @@
 'use client';
 
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'motion/react';
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 import { Children, cloneElement, useEffect, useMemo, useRef, useState } from 'react';
 
 import './Dock.css';
 
-function DockItem({ children, className = '', onClick, mouseX, spring, distance, magnification, baseItemSize }) {
+interface DockItemProps {
+  children: React.ReactNode; // Tipo para os elementos React filhos
+  className?: string;
+  onClick?: () => void;
+  mouseX: MotionValue<number>; // Tipo para o valor de movimento
+  spring: number;
+  distance: number;
+  magnification: number;
+  baseItemSize: number;
+}
+
+function DockItem({ children, className = '', onClick, mouseX, spring, distance, magnification, baseItemSize }: DockItemProps) {
   const ref = useRef(null);
   const isHovered = useMotionValue(0);
 
