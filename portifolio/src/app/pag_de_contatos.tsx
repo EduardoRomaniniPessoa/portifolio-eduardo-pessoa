@@ -67,10 +67,13 @@ function DockLabel({ children, className = '', isHovered }: { children: React.Re
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = isHovered.on('change', latest => {
-      setIsVisible(latest === 1);
-    });
-    return () => unsubscribe();
+    // Verifica se isHovered é um MotionValue válido antes de usar o método on
+    if (isHovered && typeof isHovered.on === 'function') {
+      const unsubscribe = isHovered.on('change', latest => {
+        setIsVisible(latest === 1);
+      });
+      return () => unsubscribe();
+    }
   }, [isHovered]);
 
   return (
