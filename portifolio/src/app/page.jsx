@@ -9,9 +9,9 @@ import Squares from '../components/Squares';
 
 // --- Dados Mockados para Demonstração ---
 const MOCK_PROJECTS = [
-  { id: 1, name: "E-commerce Inovador", description: "Uma plataforma de vendas B2C com foco em usabilidade mobile e carregamento rápido.", specs: "Alto desempenho, Acessibilidade AA, SEO otimizado.", langs: ["React", "Next.js", "Tailwind CSS"] },
-  { id: 2, name: "Sistema de Gestão Interna", description: "Dashboard robusto para controle de estoque, finanças e RH.", specs: "Segurança de dados, Integração API Restful, Autenticação JWT.", langs: ["Vue.js", "Node.js (Express)", "MongoDB"] },
-  { id: 3, name: "App de Receitas IA", description: "Aplicativo que gera receitas com base nos ingredientes que o usuário possui.", specs: "Processamento de Linguagem Natural (NLP), UI/UX minimalista.", langs: ["Python (Flask)", "React Native", "GPT-3 API"] },
+  { id: 1, name: "Simpliza", description: "Aplicativo de gerenciamento de renda mensal para microempreendedores (MEI). Desenvolvido como TCC na ETEC.", specs: "Gestão financeira simplificada, Dashboard intuitivo, Controle de receitas e despesas, Relatórios mensais.", langs: ["JavaScript", "Node.js", "React", "MongoDB"], githubUrl: "https://github.com/DanielAzeved0/Simpliza-TCC" },
+  { id: 2, name: "Cerne", description: "Aplicativo mobile modelado para aulas na ETEC. Bloco de notas com funcionalidade de desenho integrada.", specs: "Sincronização em tempo real, Interface intuitiva, Armazenamento em nuvem, Desenho digital.", langs: ["JavaScript", "Firebase", "React Native"], githubUrl: "https://github.com/igorgianeri/projeto-blocodenotas" },
+  { id: 3, name: "Sol do Sertão", description: "Site de restaurante com cardápio digital. Meu primeiro projeto quando cheguei na ETEC - o início da minha jornada.", specs: "Cardápio responsivo, Design intuitivo, Informações do restaurante, Galeria de pratos.", langs: ["HTML", "CSS"], githubUrl: "https://github.com/EduardoRomaniniPessoa/restaurante" },
 ];
 
 
@@ -71,7 +71,7 @@ const ProjectModal = ({ project, onClose }) => {
         aria-modal="true"
       >
         <div className="flex justify-between items-start mb-4 border-b pb-2 border-gray-200 dark:border-gray-700">
-          <h3 className="text-3xl font-extrabold text-black dark:text-white font-serif">{project.name}</h3>
+          <h3 className="text-3xl font-extrabold text-black dark:text-white">{project.name}</h3>
           <button
             onClick={onClose}
             className="p-1 rounded-full text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 transition-colors"
@@ -99,6 +99,20 @@ const ProjectModal = ({ project, onClose }) => {
               ))}
             </div>
           </div>
+
+          {project.githubUrl && (
+            <div className="pt-4 flex gap-2">
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-black text-white dark:bg-white dark:text-black rounded-lg font-semibold hover:opacity-80 transition-opacity"
+              >
+                <Github size={20} />
+                Ver no GitHub
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -171,7 +185,7 @@ const InfoModal = ({ info, onClose }) => {
           </button>
         </div>
         
-        <div className="space-y-4 mt-6">
+        <div className="space-y-4 mt-6 max-h-96 overflow-y-auto pr-2">
           {info.content}
         </div>
       </div>
@@ -383,12 +397,29 @@ export default function App() {
               content: (
                 <>
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                    oi! sou edu, um desenhista e estudante e desenvolvedor web. eu...
+                    oiee! sou o edu, um jovem desenhista, estudante e desenvolvedor web, voltado para a area de ui, eu ...
                   </p>
-                  <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 mb-4">
-                    <li>crio wireframes de sites, e</li>
-                    <li>faço desenvolvimento web frontend!</li>
+                  <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 mb-6">
+                    <li>crio wireframes de sites;</li>
+                    <li>faço comissões para desenhos;</li>
+                    <li>personalizo roupas (costura e pintura);</li>
+                    <li>procuro aprender sobre dev web frontend!!</li>
                   </ul>
+                  
+                  <div className="border-t border-gray-300 dark:border-gray-600 pt-4 mb-6">
+                    <h4 className="font-semibold text-gray-800 dark:text-white mb-2">utilizo essas linguagens</h4>
+                    <p className="text-gray-700 dark:text-gray-300">português, inglês, espanhol e francês</p>
+                  </div>
+                  
+                  <div className="border-t border-gray-300 dark:border-gray-600 pt-4">
+                    <h4 className="font-semibold text-gray-800 dark:text-white mb-2">interesses</h4>
+                    <ul className="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+                      <li>desenvolvimento de música</li>
+                      <li>zelda</li>
+                      <li>design</li>
+                      <li>arte em geral</li>
+                    </ul>
+                  </div>
                 </>
               )
             })}
